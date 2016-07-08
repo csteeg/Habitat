@@ -33,6 +33,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <UseVSHostingProcess>true</UseVSHostingProcess>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -51,6 +52,10 @@
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
       <Private>True</Private>
+    </Reference>
+    <Reference Include="Sitecore.ExperienceEditor, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\lib\Sitecore\Sitecore.ExperienceEditor.dll</HintPath>
     </Reference>
     <Reference Include="Sitecore.Kernel">
       <HintPath>..\..\..\..\lib\Sitecore\Sitecore.Kernel.dll</HintPath>
@@ -97,31 +102,29 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="packages.config" />
     <Content Include="App_Config\Include\Foundation\Foundation.Multisite.config">
       <SubType>Designer</SubType>
     </Content>
     <Content Include="sitecore\shell\Applications\Dialogs\Multisite\DatasourceSettings.xml" />
+    <Content Include="packages.config" />
     <None Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Commands\CreateRenderingSettings.cs" />
-    <Compile Include="DatasourceProviderFactory.cs" />
+    <Compile Include="Commands\OpenExperienceEditor.cs" />
     <Compile Include="Dialogs\DatasourceSettingsPage.cs" />
+    <Compile Include="Pipelines\ResolveContentLanguage.cs" />
     <Compile Include="Providers\DatasourceConfigurationService.cs" />
-    <Compile Include="Providers\ISettingsProvider.cs" />
+    <Compile Include="Providers\ISiteSettingsProvider.cs" />
     <Compile Include="Pipelines\GetDatasourceLocationAndTemplateFromSite.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Providers\ConfigurationDatasourceProvider.cs" />
-    <Compile Include="Providers\ConfigurationSiteDefinitionsProvider.cs" />
     <Compile Include="Providers\IDatasourceProvider.cs" />
     <Compile Include="Providers\ISiteDefinitionsProvider.cs" />
-    <Compile Include="Providers\ItemDataSourceProvider.cs" />
-    <Compile Include="Providers\ItemSiteDefinitionsProvider.cs" />
-    <Compile Include="Providers\SettingsProvider.cs" />
-    <Compile Include="Providers\SiteDefinitionsProviderBase.cs" />
+    <Compile Include="Providers\DatasourceProvider.cs" />
+    <Compile Include="Providers\SiteDefinitionsProvider.cs" />
+    <Compile Include="Providers\SiteSettingsProvider.cs" />
     <Compile Include="SiteContext.cs" />
-    <Compile Include="SiteDefinitionItem.cs" />
+    <Compile Include="SiteDefinition.cs" />
     <Compile Include="Templates.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -139,6 +142,9 @@
       <Project>{b535703f-8d07-4f23-a533-2974bb4cc7b1}</Project>
       <Name>Sitecore.Foundation.SitecoreExtensions</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
