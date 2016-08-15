@@ -2,8 +2,17 @@
 {
   using System;
   using System.Configuration;
+  using System.Linq;
+  using System.Threading;
   using MongoDB.Driver;
+  using Sitecore.Analytics.Data.DataAccess.MongoDb;
+  using Sitecore.Analytics.Model;
+  using Sitecore.Analytics.Processing.ProcessingPool;
+  using Sitecore.Configuration;
+  using Sitecore.ContentSearch;
   using Sitecore.Diagnostics;
+  using Sitecore.Jobs;
+  using Sitecore.SecurityModel;
 
   public class MongoRestoreService : IMongoRestoreService
   {
@@ -19,9 +28,9 @@
     }
 
     public MongoRestoreService() : this(new MongoPathsProvider(), new ProcessRunner
-                                                                  {
-                                                                    LogPrefix = LogToken
-                                                                  })
+    {
+      LogPrefix = LogToken
+    })
     {
     }
 
@@ -90,6 +99,32 @@
       }
     }
 
+    public Job StartRebuildAnalyticsIndexJob()
+    {
+      var options = new Sitecore.Jobs.JobOptions("Rebuild analytics index", "Indexing job", "shell", this, "RebuildAnalyticsIndex");
+      return Sitecore.Jobs.JobManager.Start(options);
+    }
+
+    public void RebuildAnalyticsIndex()
+    {
+      using (new SecurityDisabler())
+      {
+        ContentSearchManager.GetAnalyticsIndex().Reset();
+        var poolPath = "aggregationProcessing/processingPools/live";
+        var pool = Factory.CreateObject(poolPath, true) as ProcessingPool;
+        var beforeRebuild = pool.GetCurrentStatus().ItemsPending;
+        var driver = MongoDbDriver.FromConnectionString("analytics");
+        var visitorData = driver.Interactions.FindAllAs<VisitData>();
+        var keys = visitorData.Select(data => new InteractionKey(data.ContactId, data.InteractionId));
+        foreach (var key in keys)
+        {
+          var poolItem = new ProcessingPoolItem(key.ToByteArray());
+          pool.Add(poolItem);
+        }
+      }
+    }
+
+
     private void MarkAsRestored(MongoUrl mongoUrl)
     {
       MongoServer server = null;
@@ -106,6 +141,6 @@
       }
     }
 
-    protected virtual string GetArgumentsLine(string host, string databaseName, string dumbPath) => $"--host {host} --db {databaseName} --dir {dumbPath}";
+    protected virtual string GetArgumentsLine(string host, string databaseName, string dumbPath) => $"--drop --host {host} --db {databaseName} --dir {dumbPath}";
   }
 }
