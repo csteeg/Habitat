@@ -23,28 +23,27 @@ namespace Sitecore.Feature.Demo.Tests.Services
   {
     [Theory]
     [AutoProfileDbData]
-    public void LoadProfiles_SettingWithProfiles_ShouldReturnExistentProfilesEnumerable([Content] Item item, CurrentInteraction currentInteraction, ITracker tracker, Analytics.Tracking.Profile profile)
+    public void LoadProfiles_SettingWithProfiles_ShouldReturnExistentProfilesEnumerable(Db db, CurrentInteraction currentInteraction, ITracker tracker, Analytics.Tracking.Profile profile)
     {
-      var profileSettingItem = item.Add("profileSetting", new TemplateID(Templates.ProfilingSettings.ID));
-      var profileItem = item.Add("profile", new TemplateID(ProfileItem.TemplateID));
-      using (new EditContext(profileSettingItem))
-      {
-        profileSettingItem.Fields[Templates.ProfilingSettings.Fields.SiteProfiles].Value = profileItem.ID.ToString();
-      }
+      var profileItem = new DbItem("profile", ID.NewID, new TemplateID(ProfileItem.TemplateID));
+      db.Add(profileItem);
+      var profileSettingItem = new DbItem("profileSetting", ID.NewID, new TemplateID(Templates.ProfilingSettings.ID))
+                               {
+                                 {Templates.ProfilingSettings.Fields.SiteProfiles, profileItem.ID.ToString()}
+                               };
+      db.Add(profileSettingItem);
 
       var provider = new ProfileProvider();
 
       var fakeSiteContext = new FakeSiteContext(new StringDictionary
-      {
-        {
-          "rootPath", "/sitecore"
-        },
-        {
-          "startItem", profileSettingItem.Paths.FullPath.Remove(0, "/sitecore".Length)
-        }
-      });
+                                                {
+                                                  {"rootPath", "/sitecore"},
+                                                  {"startItem", profileSettingItem.FullPath.Remove(0, "/sitecore".Length)}
+                                                })
+                            {
+                              Database = db.Database
+                            };
 
-      fakeSiteContext.Database = item.Database;
 
       using (new SiteContextSwitcher(fakeSiteContext))
       {
@@ -104,59 +103,6 @@ namespace Sitecore.Feature.Demo.Tests.Services
         provider.GetSiteProfiles().Count().Should().Be(0);
       }
     }
-
-
-    [Theory]
-    [AutoProfileDbData]
-    public void HasMatchingPattern_ItemNotExists_ShouldReturnFalse([Content] Item profileItem, CurrentInteraction currentInteraction, ITracker tracker, Analytics.Tracking.Profile profile)
-    {
-      tracker.Interaction.Returns(currentInteraction);
-      currentInteraction.Profiles[null].ReturnsForAnyArgs(profile);
-      profile.PatternId = Guid.NewGuid();
-
-
-      var fakeSiteContext = new FakeSiteContext("fake")
-      {
-        Database = Database.GetDatabase("master")
-      };
-
-
-      using (new TrackerSwitcher(tracker))
-      {
-        using (new SiteContextSwitcher(fakeSiteContext))
-        {
-          var provider = new ProfileProvider();
-          provider.HasMatchingPattern(new ProfileItem(profileItem), ProfilingTypes.Active).Should().BeFalse();
-        }
-      }
-    }
-
-
-    [Theory]
-    [AutoProfileDbData]
-    public void HasMatchingPattern_ItemExists_ShouldReturnTrue([Content] Item profileItem, CurrentInteraction currentInteraction, ITracker tracker, Analytics.Tracking.Profile profile)
-    {
-      tracker.Interaction.Returns(currentInteraction);
-      currentInteraction.Profiles[null].ReturnsForAnyArgs(profile);
-
-      var pattern = profileItem.Add("fakePattern", new TemplateID(PatternCardItem.TemplateID));
-      profile.PatternId = pattern.ID.Guid;
-      var fakeSiteContext = new FakeSiteContext("fake")
-      {
-        Database = Database.GetDatabase("master")
-      };
-
-
-      using (new TrackerSwitcher(tracker))
-      {
-        using (new SiteContextSwitcher(fakeSiteContext))
-        {
-          var provider = new ProfileProvider();
-          provider.HasMatchingPattern(new ProfileItem(profileItem), ProfilingTypes.Active).Should().BeTrue();
-        }
-      }
-    }
-
 
     [Theory]
     [AutoProfileDbData]
@@ -228,34 +174,6 @@ namespace Sitecore.Feature.Demo.Tests.Services
           var result = provider.HasMatchingPattern(new ProfileItem(profileItem), ProfilingTypes.Historic);
           //Assert 
           result.Should().BeFalse();
-        }
-      }
-    }
-
-    [Theory]
-    [AutoProfileDbData]
-    public void HasMatchingPattern_HistoricProfileAndItemExists_ShouldReturnTrue([Content] Item profileItem, Contact contact, ITracker tracker, Analytics.Tracking.Profile profile)
-    {
-      //Arrange
-      tracker.Contact.Returns(contact);
-      var behaviorPattern = Substitute.For<IBehaviorProfileContext>();
-      behaviorPattern.PatternId.Returns(profileItem.ID);
-      contact.BehaviorProfiles[Arg.Is(profileItem.ID)].Returns(behaviorPattern);
-
-      var pattern = profileItem.Add("fakePattern", new TemplateID(PatternCardItem.TemplateID));
-      profile.PatternId = pattern.ID.Guid;
-      var fakeSiteContext = new FakeSiteContext("fake")
-      {
-        Database = Database.GetDatabase("master")
-      };
-
-
-      using (new TrackerSwitcher(tracker))
-      {
-        using (new SiteContextSwitcher(fakeSiteContext))
-        {
-          var provider = new ProfileProvider();
-          provider.HasMatchingPattern(new ProfileItem(profileItem), ProfilingTypes.Historic).Should().BeTrue();
         }
       }
     }

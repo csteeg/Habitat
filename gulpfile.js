@@ -14,13 +14,14 @@ var nugetRestore = require('gulp-nuget-restore');
 var fs = require('fs');
 var unicorn = require("./scripts/unicorn.js");
 var habitat = require("./scripts/habitat.js");
+var yargs = require("yargs").argv;
 
 module.exports.config = config;
 
 gulp.task("default", function (callback) {
   config.runCleanBuilds = true;
   return runSequence(
-    "01-Copy-Sitecore-Lib",
+    "01-Copy-Sitecore-License",
     "02-Nuget-Restore",
     "03-Publish-All-Projects",
     "04-Apply-Xml-Transform",
@@ -32,17 +33,10 @@ gulp.task("default", function (callback) {
 /*****************************
   Initial setup
 *****************************/
-gulp.task("01-Copy-Sitecore-Lib", function () {
-  console.log("Copying Sitecore Libraries and License file");
+gulp.task("01-Copy-Sitecore-License", function () {
+  console.log("Copying Sitecore License file");
 
-  fs.statSync(config.sitecoreLibraries);
-
-  var files = config.sitecoreLibraries + "/**/*";
-
-  var libs = gulp.src(files).pipe(gulp.dest("./lib/Sitecore"));
-  var license = gulp.src(config.licensePath).pipe(gulp.dest("./lib"));
-
-  return merge(libs, license);
+  return gulp.src(config.licensePath).pipe(gulp.dest("./lib"));
 });
 
 gulp.task("02-Nuget-Restore", function (callback) {
@@ -65,7 +59,7 @@ gulp.task("04-Apply-Xml-Transform", function () {
     .pipe(foreach(function (stream, file) {
       var fileToTransform = file.path.replace(/.+code\\(.+)\.transform/, "$1");
       util.log("Applying configuration transform: " + file.path);
-      return gulp.src("./applytransform.targets")
+      return gulp.src("./scripts/applytransform.targets")
         .pipe(msbuild({
           targets: ["ApplyTransform"],
           configuration: config.buildConfiguration,
@@ -119,33 +113,48 @@ gulp.task("Copy-Local-Assemblies", function () {
 /*****************************
   Publish
 *****************************/
+var publishStream = function (stream, dest) {
+  var targets = ["Build"];
+
+  return stream
+    .pipe(debug({ title: "Building project:" }))
+    .pipe(msbuild({
+      targets: targets,
+      configuration: config.buildConfiguration,
+      logCommand: false,
+      verbosity: "minimal",
+      stdout: true,
+      errorOnFail: true,
+      maxcpucount: 0,
+      toolsVersion: 14.0,
+      properties: {
+        DeployOnBuild: "true",
+        DeployDefaultTarget: "WebPublish",
+        WebPublishMethod: "FileSystem",
+        DeleteExistingFiles: "false",
+        publishUrl: dest,
+        _FindDependencies: "false"
+      }
+    }));
+}
+
+var publishProject = function (location, dest) {
+  dest = dest || config.websiteRoot;
+
+  console.log("publish to " + dest + " folder");
+  return gulp.src(["./src/" + location + "/code/*.csproj"])
+    .pipe(foreach(function (stream, file) {
+      return publishStream(stream, dest);
+    }));
+}
+
 var publishProjects = function (location, dest) {
   dest = dest || config.websiteRoot;
-  var targets = ["Build"];
 
   console.log("publish to " + dest + " folder");
   return gulp.src([location + "/**/code/*.csproj"])
     .pipe(foreach(function (stream, file) {
-      return stream
-        .pipe(debug({ title: "Building project:" }))
-        .pipe(msbuild({
-          targets: targets,
-          configuration: config.buildConfiguration,
-          logCommand: false,
-          verbosity: "minimal",
-          stdout: true,
-          errorOnFail: true,
-          maxcpucount: 0,
-          toolsVersion: 14.0,
-          properties: {
-            DeployOnBuild: "true",
-            DeployDefaultTarget: "WebPublish",
-            WebPublishMethod: "FileSystem",
-            DeleteExistingFiles: "false",
-            publishUrl: dest,
-            _FindDependencies: "false"
-          }
-        }));
+      return publishStream(stream, dest);
     }));
 };
 
@@ -178,6 +187,14 @@ gulp.task("Publish-Feature-Projects", function () {
 
 gulp.task("Publish-Project-Projects", function () {
   return publishProjects("./src/Project");
+});
+
+gulp.task("Publish-Project", function () {
+  if(yargs && yargs.m && typeof(yargs.m) == 'string') {
+    return publishProject(yargs.m);
+  } else {
+    throw "\n\n------\n USAGE: -m Layer/Module \n------\n\n";
+  }
 });
 
 gulp.task("Publish-Assemblies", function () {
