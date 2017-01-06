@@ -3,7 +3,11 @@
 @using Sitecore.Foundation.Dictionary.Extensions
 @using Sitecore.Foundation.SitecoreExtensions.Extensions
 @using Sitecore.Mvc
+@using BoC.InversionOfControl
 @model Sitecore.Feature.Accounts.Models.LoginInfo
+@{
+    var accountsSettingsService = IoC.Resolver.Resolve<IAccountsSettingsService>();
+}
 <div class="login-body">
   @Html.ValidationMessage("invalidCredentials", new { @class = "alert alert-danger" }, "div")
   <div class="form-group @Html.ValidationErrorFor(x => x.Email, "has-error")">
@@ -39,6 +43,6 @@
                                                     }, "p")
   </div>
   <button type="button" class="btn btn-block btn-primary" onclick="login('loginModal')">@Html.Sitecore().DictionaryField("/Accounts/Login/Login", "Login")</button>
-  <a class="btn btn-block btn-default" href="@AccountsSettingsService.Instance.GetPageLinkOrDefault(Sitecore.Context.Item, Templates.AccountsSettings.Fields.ForgotPasswordPage)">@Html.Sitecore().DictionaryField("/Accounts/Login/Forgot Your Password", "Forgot your password?")</a>
-  <a class="btn btn-block btn-default" href="@AccountsSettingsService.Instance.GetPageLinkOrDefault(Sitecore.Context.Item, Templates.AccountsSettings.Fields.RegisterPage)">@Html.Sitecore().DictionaryField("/Accounts/Login/Register", "Register")</a>
+  <a class="btn btn-block btn-default" href="@accountsSettingsService.GetPageLinkOrDefault(Sitecore.Context.Item, Templates.AccountsSettings.Fields.ForgotPasswordPage)">@Html.Sitecore().DictionaryField("/Accounts/Login/Forgot Your Password", "Forgot your password?")</a>
+  <a class="btn btn-block btn-default" href="@accountsSettingsService.GetPageLinkOrDefault(Sitecore.Context.Item, Templates.AccountsSettings.Fields.RegisterPage)">@Html.Sitecore().DictionaryField("/Accounts/Login/Register", "Register")</a>
 </div>

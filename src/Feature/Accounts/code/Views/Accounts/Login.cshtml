@@ -5,7 +5,10 @@
 @using Sitecore.Mvc.Configuration
 @model Sitecore.Feature.Accounts.Models.LoginInfo
 
-@using (Html.BeginRouteForm(MvcSettings.SitecoreRouteName, FormMethod.Post, new { @class = "form-signin" }))
+@{
+    var accountsSettingsService = IoC.Resolver.Resolve<IAccountsSettingsService>();
+}
+@using (Html.BeginRouteForm(Sitecore.Mvc.Configuration.MvcSettings.SitecoreRouteName, FormMethod.Post, new { @class = "form-signin" }))
 {
     @Html.Hidden("ReturnUrl", Model.ReturnUrl)
     @Html.AddUniqueFormId()
@@ -51,8 +54,8 @@
             <input type="submit" class="btn btn-primary btn-lg btn-block" value="@Html.Sitecore().Dictionary("/Accounts/Login/Login", "Login")"/>
         </div>
         <div class="col-lg-6">
-            <a href="@AccountsSettingsService.Instance.GetPageLinkOrDefault(Sitecore.Context.Item, Templates.AccountsSettings.Fields.RegisterPage)" class="btn btn-default btn-lg btn-block">@Html.Sitecore().DictionaryField("/Accounts/Login/Register", "Register")</a>
+            <a href="@accountsSettingsService.GetPageLinkOrDefault(Sitecore.Context.Item, Templates.AccountsSettings.Fields.RegisterPage)" class="btn btn-default btn-lg btn-block">@Html.Sitecore().DictionaryField("/Accounts/Login/Register", "Register")</a>
         </div>
     </div>
-    <a href="@AccountsSettingsService.Instance.GetPageLinkOrDefault(Sitecore.Context.Item, Templates.AccountsSettings.Fields.ForgotPasswordPage)" class="btn btn-link">@Html.Sitecore().DictionaryField("/Accounts/Login/Forgot Your Password", "Forgot your password?")</a>
+    <a href="@accountsSettingsService.GetPageLinkOrDefault(Sitecore.Context.Item, Templates.AccountsSettings.Fields.ForgotPasswordPage)" class="btn btn-link">@Html.Sitecore().DictionaryField("/Accounts/Login/Forgot Your Password", "Forgot your password?")</a>
 }

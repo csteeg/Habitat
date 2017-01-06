@@ -1,23 +1,26 @@
 ﻿namespace Sitecore.Foundation.Dictionary.Extensions
 {
-  using System.Web;
-  using Sitecore.Foundation.Dictionary.Repositories;
-  using Sitecore.Foundation.SitecoreExtensions.Extensions;
-  using Sitecore.Mvc.Helpers;
+    using System.Web;
+    using Sitecore.Foundation.Dictionary.Repositories;
+    using Sitecore.Foundation.SitecoreExtensions.Extensions;
+    using Sitecore.Mvc.Helpers;
 
-  public static class SitecoreExtensions
-  {
-    public static string Dictionary(this SitecoreHelper helper, string relativePath, string defaultValue = "")
+    public static class SitecoreExtensions
     {
-      return DictionaryPhraseRepository.Current.Get(relativePath, defaultValue);
-    }
+        public static string Dictionary(this SitecoreHelper helper, string relativePath, string defaultValue = "")
+        {
+            return DictionaryPhraseRepository.Current.Get(relativePath, defaultValue);
+        }
 
-    public static HtmlString DictionaryField(this SitecoreHelper helper, string relativePath, string defaultValue = "")
-    {
-      var item = DictionaryPhraseRepository.Current.GetItem(relativePath, defaultValue);
-      if (item == null)
-        return new HtmlString(defaultValue);
-      return helper.Field(Templates.DictionaryEntry.Fields.Phrase, item);
+        public static HtmlString DictionaryField(this SitecoreHelper helper, string relativePath, string defaultValue = "")
+        {
+            var item = DictionaryPhraseRepository.Current.GetItem(relativePath, defaultValue);
+            if (item == null)
+                return new HtmlString(defaultValue);
+
+            if (item.FieldHasValue(Templates.DictionaryRichTextEntry.Fields.Phrase))
+                return helper.Field(Templates.DictionaryRichTextEntry.Fields.Phrase, item);
+            return helper.Field(Templates.DictionaryEntry.Fields.Phrase, item);
+        }
     }
-  }
 }

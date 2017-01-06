@@ -1,0 +1,258 @@
+﻿@using Sitecore.Feature.Cart.ViewModels
+@using Sitecore.Commerce.Entities.Carts
+@using Glass.Mapper.Sc.Web.Mvc
+@inherits GlassView<OrderConfirmationEmailViewModel>
+
+<!-- BEGIN TEMPLATE // -->
+<!--[if gte mso 9]>
+<table align="center" border="0" cellspacing="0" cellpadding="0" width="600" style="width:600px;">
+<tr>
+<td align="center" valign="top" width="600" style="width:600px;">
+<![endif]-->
+<table border="0" cellpadding="0" cellspacing="0" width="100%" class="templateContainer">
+	<tr>
+		<td valign="top" id="templatePreheader">
+			<table border="0" cellpadding="0" cellspacing="0" width="100%" class="mcnTextBlock" style="min-width:100%;">
+				<tbody class="mcnTextBlockOuter">
+					<tr>
+						<td valign="top" class="mcnTextBlockInner" style="padding-top:9px;">
+							<!--[if mso]>
+							<table align="left" border="0" cellspacing="0" cellpadding="0" width="100%" style="width:100%;">
+							<tr>
+							<![endif]-->
+							<!--[if mso]>
+							<td valign="top" width="600" style="width:600px;">
+							<![endif]-->
+							<table align="left" border="0" cellpadding="0" cellspacing="0" style="max-width:100%; min-width:100%;" width="100%" class="mcnTextContentContainer">
+								<tbody>
+									<tr>
+
+										<td valign="top" class="mcnTextContent" style="padding-top:0; padding-right:18px; padding-bottom:9px; padding-left:18px;">
+
+											@Model.DataSource.Header @Model.Order.OrderID
+										</td>
+									</tr>
+								</tbody>
+							</table>
+							<!--[if mso]>
+							</td>
+							<![endif]-->
+							<!--[if mso]>
+							</tr>
+							</table>
+							<![endif]-->
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</td>
+	</tr>
+	<tr>
+		<td valign="top" id="templateHeader">
+			<table border="0" cellpadding="0" cellspacing="0" width="100%" class="mcnImageBlock" style="min-width:100%;">
+				<tbody class="mcnImageBlockOuter">
+					<tr>
+						<td valign="top" style="padding:9px" class="mcnImageBlockInner">
+							<table align="left" width="100%" border="0" cellpadding="0" cellspacing="0" class="mcnImageContentContainer" style="min-width:100%;">
+								<tbody>
+									<tr>
+										<td class="mcnImageContent" valign="top" style="padding-right: 9px; padding-left: 9px; padding-top: 0; padding-bottom: 0; text-align:center;">
+
+
+											<img align="center" alt="" src="https://gallery.mailchimp.com/e76f72f7c349523883a9d1f57/images/49053c21-e356-40b7-bb3f-4fa2ab8e9e72.png" width="278" style="max-width:278px; padding-bottom: 0; display: inline !important; vertical-align: bottom;" class="mcnImage">
+
+
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</td>
+	</tr>
+	<tr>
+		<td valign="top" id="templateBody">
+			<table border="0" cellpadding="0" cellspacing="0" width="100%" class="mcnTextBlock" style="min-width:100%;">
+				<tbody class="mcnTextBlockOuter">
+					<tr>
+						<td valign="top" class="mcnTextBlockInner" style="padding-top:9px;">
+							<!--[if mso]>
+							<table align="left" border="0" cellspacing="0" cellpadding="0" width="100%" style="width:100%;">
+							<tr>
+							<![endif]-->
+							<!--[if mso]>
+							<td valign="top" width="600" style="width:600px;">
+							<![endif]-->
+							<table align="left" border="0" cellpadding="0" cellspacing="0" style="max-width:100%; min-width:100%;" width="100%" class="mcnTextContentContainer">
+								<tbody>
+									<tr>
+
+										<td valign="top" class="mcnTextContent" style="padding-top:0; padding-right:18px; padding-bottom:9px; padding-left:18px;">
+
+											<h1>@Model.DataSource.Salutation @Model.Order.Parties.FirstOrDefault().FirstName @Model.Order.Parties.FirstOrDefault().LastName,</h1>
+
+											@Html.Raw(Model.DataSource.Introduction)
+
+											<p>@Model.DataSource.OrderReceived&nbsp;<strong>@Model.Order.OrderID</strong></p>
+
+											@Html.Raw(Model.DataSource.OrderWillBeSent)
+
+											<hr>
+											<p>
+												<strong>@Model.DataSource.OrderOverview</strong><br>
+												@Model.DataSource.OrderContains
+											</p>
+											@foreach (var line in Model.Order.Lines)
+											{
+												<p>
+													@line.Product.ProductName, @line.Product.Properties["VariantSku"]<br>
+													@line.Quantity @Model.DataSource.Pieces, @line.Total.Description
+												</p>
+											}
+											<hr>
+											<p>
+												<strong>@Model.DataSource.AccountingDetails</strong><br>
+												@Model.Order.Parties.FirstOrDefault(p => p.PartyId.Equals(Model.Order.AccountingCustomerParty.PartyID)).FirstName @Model.Order.Parties.FirstOrDefault(p => p.PartyId.Equals(Model.Order.AccountingCustomerParty.PartyID)).LastName<br>
+												@Model.Order.Parties.FirstOrDefault(p => p.PartyId.Equals(Model.Order.AccountingCustomerParty.PartyID)).Address1<br>
+												@Model.Order.Parties.FirstOrDefault(p => p.PartyId.Equals(Model.Order.AccountingCustomerParty.PartyID)).ZipPostalCode, @Model.Order.Parties.FirstOrDefault(p => p.PartyId.Equals(Model.Order.AccountingCustomerParty.PartyID)).City<br>
+												@Model.Order.Parties.FirstOrDefault(p => p.PartyId.Equals(Model.Order.AccountingCustomerParty.PartyID)).Country<br>
+											</p>
+											<p>
+												<strong>@Model.DataSource.ShippingDetails</strong><br>
+												@Model.Order.Parties.FirstOrDefault(p => p.PartyId.Equals(Model.Order.BuyerCustomerParty.PartyID)).FirstName @Model.Order.Parties.FirstOrDefault(p => p.PartyId.Equals(Model.Order.BuyerCustomerParty.PartyID)).LastName<br>
+												@Model.Order.Parties.FirstOrDefault(p => p.PartyId.Equals(Model.Order.BuyerCustomerParty.PartyID)).Address1<br>
+												@Model.Order.Parties.FirstOrDefault(p => p.PartyId.Equals(Model.Order.BuyerCustomerParty.PartyID)).ZipPostalCode, @Model.Order.Parties.FirstOrDefault(p => p.PartyId.Equals(Model.Order.BuyerCustomerParty.PartyID)).City<br>
+												@Model.Order.Parties.FirstOrDefault(p => p.PartyId.Equals(Model.Order.BuyerCustomerParty.PartyID)).Country<br>
+											</p>
+											<hr>
+											@Html.Raw(Model.DataSource.SenderDetails)
+											@if (!string.IsNullOrEmpty(Model.DataSource.AdditionalContent))
+											{
+												<hr>
+												@Html.Raw(Model.DataSource.AdditionalContent)
+											}
+										</td>
+									</tr>
+								</tbody>
+							</table>
+							<!--[if mso]>
+							</td>
+							<![endif]-->
+							<!--[if mso]>
+							</tr>
+							</table>
+							<![endif]-->
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</td>
+	</tr>
+	<tr>
+		<td valign="top" id="templateFooter">
+			<table border="0" cellpadding="0" cellspacing="0" width="100%" class="mcnBoxedTextBlock" style="min-width:100%;">
+				<!--[if gte mso 9]>
+				<table align="center" border="0" cellspacing="0" cellpadding="0" width="100%">
+				<![endif]-->
+				<tbody class="mcnBoxedTextBlockOuter">
+					<tr>
+						<td valign="top" class="mcnBoxedTextBlockInner">
+
+							<!--[if gte mso 9]>
+							<td align="center" valign="top" ">
+							<![endif]-->
+							<table align="left" border="0" cellpadding="0" cellspacing="0" width="100%" style="min-width:100%;" class="mcnBoxedTextContentContainer">
+								<tbody>
+									<tr>
+
+										<td style="padding-top:9px; padding-left:18px; padding-bottom:9px; padding-right:18px;">
+
+											<table border="0" cellpadding="18" cellspacing="0" class="mcnTextContentContainer" width="100%" style="min-width: 100% !important;background-color: #000000;">
+												<tbody>
+													<tr>
+														<td valign="top" class="mcnTextContent" style="color: #FFFFFF;font-family: Helvetica;font-size: 14px;font-weight: normal;text-align: center;">
+															<span style="font-size:14px"><a href="https://www.dunlopboots.com/" target="_blank"><span style="color:#FFFFFF">www.dunlopboots.com</span></a></span>
+														</td>
+													</tr>
+												</tbody>
+											</table>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+							<!--[if gte mso 9]>
+							</td>
+							<![endif]-->
+							<!--[if gte mso 9]>
+							</tr>
+							</table>
+							<![endif]-->
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			<table border="0" cellpadding="0" cellspacing="0" width="100%" class="mcnDividerBlock" style="min-width:100%;">
+				<tbody class="mcnDividerBlockOuter">
+					<tr>
+						<td class="mcnDividerBlockInner" style="min-width: 100%; padding: 10px 18px 25px;">
+							<table class="mcnDividerContent" border="0" cellpadding="0" cellspacing="0" width="100%" style="min-width: 100%;border-top: 2px solid #EEEEEE;">
+								<tbody>
+									<tr>
+										<td>
+											<span></span>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+							<!--
+											<td class="mcnDividerBlockInner" style="padding: 18px;">
+											<hr class="mcnDividerContent" style="border-bottom-color:none; border-left-color:none; border-right-color:none; border-bottom-width:0; border-left-width:0; border-right-width:0; margin-top:0; margin-right:0; margin-bottom:0; margin-left:0;" />
+							-->
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			<table border="0" cellpadding="0" cellspacing="0" width="100%" class="mcnTextBlock" style="min-width:100%;">
+				<tbody class="mcnTextBlockOuter">
+					<tr>
+						<td valign="top" class="mcnTextBlockInner" style="padding-top:9px;">
+							<!--[if mso]>
+							<table align="left" border="0" cellspacing="0" cellpadding="0" width="100%" style="width:100%;">
+							<tr>
+							<![endif]-->
+							<!--[if mso]>
+							<td valign="top" width="600" style="width:600px;">
+							<![endif]-->
+							<table align="left" border="0" cellpadding="0" cellspacing="0" style="max-width:100%; min-width:100%;" width="100%" class="mcnTextContentContainer">
+								<tbody>
+									<tr>
+
+										<td valign="top" class="mcnTextContent" style="padding-top:0; padding-right:18px; padding-bottom:9px; padding-left:18px;">
+
+											<em>@Model.DataSource.Copyright</em>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+							<!--[if mso]>
+							</td>
+							<![endif]-->
+							<!--[if mso]>
+							</tr>
+							</table>
+							<![endif]-->
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</td>
+	</tr>
+</table>
+<!--[if gte mso 9]>
+</td>
+</tr>
+</table>
+<![endif]-->
+<!-- // END TEMPLATE -->

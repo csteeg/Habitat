@@ -65,18 +65,24 @@
 
     public virtual ISearchResults FindAll(int skip, int take)
     {
-      using (var context = ContentSearchManager.GetIndex(this.ContextItem).CreateSearchContext())
-      {
-        var queryable = this.CreateAndInitializeQuery(context);
+			try {
+				using (var context = ContentSearchManager.GetIndex(this.ContextItem).CreateSearchContext())
+				{
+					var queryable = this.CreateAndInitializeQuery(context);
 
-        if (skip > 0)
-          queryable = queryable.Skip(skip);
-        if (take > 0)
-          queryable = queryable.Take(take);
+					if (skip > 0)
+						queryable = queryable.Skip(skip);
+					if (take > 0)
+						queryable = queryable.Take(take);
 
-        var results = queryable.GetResults();
-        return SearchResultsFactory.Create(results, null);
-      }
+					var results = queryable.GetResults();
+					return SearchResultsFactory.Create(results, null);
+				}
+			}
+			catch
+			{
+				return null;
+			}
     }
 
     private IQueryable<SearchResultItem> CreateAndInitializeQuery(IProviderSearchContext context)

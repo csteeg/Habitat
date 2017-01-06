@@ -24,10 +24,6 @@
         private readonly IUserProfileService userProfileService;
         private readonly IContactProfileService contactProfileService;
 
-        public AccountsController() : this(new AccountRepository(new AccountTrackerService(new AccountsSettingsService(), new TrackerService())), new NotificationService(new AccountsSettingsService()), new AccountsSettingsService(), new GetRedirectUrlService(), new UserProfileService(), new ContactProfileService())
-        {
-        }
-
         public AccountsController(IAccountRepository accountRepository, INotificationService notificationService, IAccountsSettingsService accountsSettingsService, IGetRedirectUrlService getRedirectUrlService, IUserProfileService userProfileService, IContactProfileService contactProfileService)
         {
             this.accountRepository = accountRepository;

@@ -1,0 +1,78 @@
+﻿---
+ID: "2af1708d-1a34-4c9f-be4b-50138be03079"
+Parent: "59f37069-3118-4151-8c01-5da0ef12cb4e"
+Template: "f5d247e0-80e6-4f31-9921-d30d00b61b3c"
+Path: /sitecore/content/Applications/Content Editor/Gutters/Publication Status
+DB: core
+SharedFields:
+- ID: "7a108204-dc61-4d25-a138-fd6f53f48abf"
+  Hint: Type
+  Value: Valtech.Foundation.Publishing.Gutter.PublicationStatus
+- ID: "ba3f86a2-4a1c-4d78-b63d-91c2779c1b5e"
+  Hint: __Sortorder
+  Value: 350
+Languages:
+- Language: da
+  Fields:
+  - ID: "b5e02ad9-d56f-4c41-a065-a133db87bdeb"
+    Hint: __Display name
+    Value: Præsentationen er tilsidesat
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20160519T084615Z
+    - ID: "5024402f-0b92-4c13-a7d2-86ed85ff3560"
+      Hint: Header
+      Value: Præsentationen er tilsidesat
+    - ID: "5dd74568-4d4b-44c1-b513-0af5f4cda34f"
+      Hint: __Created by
+      Value: sitecore\admin
+- Language: "de-DE"
+  Fields:
+  - ID: "b5e02ad9-d56f-4c41-a065-a133db87bdeb"
+    Hint: __Display name
+    Value: Darstellung Überschrieben
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20160519T084746Z
+    - ID: "5024402f-0b92-4c13-a7d2-86ed85ff3560"
+      Hint: Header
+      Value: Darstellung Überschrieben
+    - ID: "5dd74568-4d4b-44c1-b513-0af5f4cda34f"
+      Hint: __Created by
+      Value: sitecore\admin
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20100811T111052Z
+    - ID: "5024402f-0b92-4c13-a7d2-86ed85ff3560"
+      Hint: Header
+      Value: Publication Status
+    - ID: "5dd74568-4d4b-44c1-b513-0af5f4cda34f"
+      Hint: __Created by
+      Value: sitecore\admin
+- Language: "ja-JP"
+  Fields:
+  - ID: "b5e02ad9-d56f-4c41-a065-a133db87bdeb"
+    Hint: __Display name
+    Value: 再定義されたプレゼンテーション
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20160519T084439Z
+    - ID: "5024402f-0b92-4c13-a7d2-86ed85ff3560"
+      Hint: Header
+      Value: 再定義されたプレゼンテーション
+    - ID: "5dd74568-4d4b-44c1-b513-0af5f4cda34f"
+      Hint: __Created by
+      Value: sitecore\admin

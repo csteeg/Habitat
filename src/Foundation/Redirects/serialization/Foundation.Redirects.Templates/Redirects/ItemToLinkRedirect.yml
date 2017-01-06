@@ -1,0 +1,30 @@
+﻿---
+ID: "d401f9d4-05d1-4281-8b4e-9b7d2f27821f"
+Parent: "17410711-11a8-47da-a1b4-742037c29518"
+Template: "ab86861a-6030-46c5-b394-e8f99e8b87db"
+Path: /sitecore/templates/Foundation/Redirects/ItemToLinkRedirect
+DB: master
+SharedFields:
+- ID: "06d5295c-ed2f-4a54-9bf2-26228d113318"
+  Hint: __Icon
+  Value: Applications/32x32/arrow_right_green.png
+- ID: "12c33f3f-86c5-43a5-aeb4-5598cec45116"
+  Hint: __Base template
+  Type: tree list
+  Value: |
+    {1930BBEB-7805-471A-A3BE-4858AC7CF696}
+    {BFFA0451-C653-4678-86C8-5E401D12C5BE}
+    {96AE6BDF-2BC9-47A3-8D83-F788F670BE9E}
+    {DD27DB72-44FE-4754-9086-97A7BA82B06E}
+    {41D82537-4720-409B-903E-2BB2F64312F2}
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: "20150216T120513:635596851136404503Z"
+    - ID: "5dd74568-4d4b-44c1-b513-0af5f4cda34f"
+      Hint: __Created by
+      Value: default\Anonymous

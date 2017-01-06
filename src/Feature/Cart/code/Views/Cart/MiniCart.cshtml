@@ -1,0 +1,8 @@
+﻿<li class="c-nav__cart apply-cart-binding" data-bind="css: totalProductCount() > 0 ? 'has-items' : ''">
+	@Html.Sitecore().BeginField("Link")
+		<svg class="svg-icon svg-icon-cart">
+			<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-cart"></use>
+		</svg>
+		<span style="display: none" class="c-cart__length" data-bind="text:totalProductCount, visible: totalProductCount() > 0">0</span>
+	@Html.Sitecore().EndField()
+</li>

@@ -8,7 +8,8 @@
   {
     string GetPageLink(Item contextItem, ID fieldID);
     MailMessage GetForgotPasswordMailTemplate();
-    string GetPageLinkOrDefault(Item contextItem, ID field, Item defaultItem);
+    string GetPageLinkOrDefault(Item contextItem, ID field, Item defaultItem = null);
     ID GetRegistrationOutcome(Item contextItem);
+    Item GetAccountsSettingsItem(Item contextItem);
   }
 }

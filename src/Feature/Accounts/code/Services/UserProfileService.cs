@@ -24,10 +24,6 @@
         protected virtual string PhoneNumber => this.GetUserProfileFieldName(Templates.UserProfile.Fields.PhoneNumber);
         protected virtual string Interest => this.GetUserProfileFieldName(Templates.UserProfile.Fields.Interest);
 
-        public UserProfileService() : this(new ProfileSettingsService(), new UserProfileProvider())
-        {
-        }
-
         public UserProfileService(IProfileSettingsService profileSettingsService, IUserProfileProvider userProfileProvider)
         {
             this.profileSettingsService = profileSettingsService;

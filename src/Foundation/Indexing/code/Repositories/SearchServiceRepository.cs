@@ -7,11 +7,7 @@
   public class SearchServiceRepository : ISearchServiceRepository
   {
     private readonly ISearchSettings settings;
-
-    public SearchServiceRepository() : this(new SearchSettingsBase())
-    {
-    }
-
+        
     public SearchServiceRepository(ISearchSettings searchSettings)
     {
       this.settings = searchSettings;

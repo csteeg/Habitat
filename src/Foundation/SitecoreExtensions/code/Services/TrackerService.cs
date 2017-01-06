@@ -1,4 +1,6 @@
-﻿namespace Sitecore.Foundation.SitecoreExtensions.Services
+﻿using Sitecore.Analytics.Tracking;
+
+namespace Sitecore.Foundation.SitecoreExtensions.Services
 {
   using Sitecore.Analytics;
   using Sitecore.Analytics.Data.Items;
@@ -23,6 +25,8 @@
         Tracker.Current.CurrentPage.Register(pageEventItem);
       }
     }
+
+      public Contact CurrentContact => this.IsActive ? Tracker.Current.Contact : null;
 
     public void TrackOutcome(ID definitionId)
     {

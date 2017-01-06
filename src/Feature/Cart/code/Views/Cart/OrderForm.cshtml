@@ -1,0 +1,207 @@
+﻿@using Sitecore.Foundation.Dictionary.Extensions
+@using Sitecore.Commerce.Entities.Prices
+@using Sitecore.Foundation.SitecoreExtensions.Extensions
+@inherits Glass.Mapper.Sc.Web.Mvc.GlassView<Sitecore.Feature.Cart.ViewModels.OrderViewModel>
+
+<div class="c-checkout apply-cart-binding">
+    <div class="" @(!Sitecore.Context.PageMode.IsExperienceEditorEditing ? Html.Raw("data-bind=\"visible: totalProductCount() <= 0\" style=\"display:none\"") : Html.Raw(""))>
+        <div class="col-xs-100 col-md-100 col-lg-100 c-headline">
+			<div class="c-cart__caption">
+				<svg class="svg-icon svg-icon-truck">
+					<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-truck"></use>
+				</svg>
+				@Html.Sitecore().DictionaryField("Cart/Checkout/Cart is empty")
+			</div>
+        </div>
+    </div>
+
+	<div class="row" @(!Sitecore.Context.PageMode.IsExperienceEditorEditing ? Html.Raw("data-bind=\"visible: totalProductCount() > 0\" style=\"display:none\"") : Html.Raw(""))>
+		<div class="col-xs-100 col-md-60 col-lg-70 c-checkout">
+		    <form method="post" class="js-checkout js-checkout-address o-form" id="addressform@(Html.Sitecore().CurrentRendering?.UniqueId.ToString("N"))">
+			    @Html.AddUniqueFormId()
+			    <fieldset class="c-checkout__customer" data-bind="with: getParty(accountingCustomerPartyId())">
+			        <div class="c-checkout__header">
+			            <h2>@Html.Sitecore().DictionaryField("Cart/Checkout/Customer information")</h2>
+			            @Html.Sitecore().DictionaryField("Cart/Checkout/Fill in")
+			        </div>
+					<div class="c-checkout__customer-content" data-bind="slideVisible: $root.addressIsValid() == false">
+						<div class="o-field-line">
+							<label>@Html.Sitecore().DictionaryField("Cart/Checkout/Name")</label>
+							<div class="row u-gutter-small">
+								<div class="col-xs-100 col-sm-50">@Html.EditorFor(m => m.FirstName, new { htmlAttributes = new { placeholder = @Html.Sitecore().Dictionary("Cart/Checkout/Fields/First name"), required = "required", data_bind = "value: firstName" } })</div>
+								<div class="col-xs-100 col-sm-50">@Html.EditorFor(m => m.LastName, new { htmlAttributes = new { placeholder = @Html.Sitecore().Dictionary("Cart/Checkout/Fields/Last name"), required = "required", data_bind = "value: lastName" } })</div>
+							</div>
+						</div>
+						<div class="o-field-line">
+							<label>@Html.Sitecore().DictionaryField("Cart/Checkout/Address")</label>
+							<div class="row u-gutter-small">
+								<div class="col-xs-100">@Html.EditorFor(m => m.Address, new { htmlAttributes = new { placeholder = @Html.Sitecore().Dictionary("Cart/Checkout/Fields/Address"), required = "required", data_bind = "value: address1" } })</div>
+								<div class="col-xs-100 col-sm-50">@Html.EditorFor(m => m.ZipCode, new { htmlAttributes = new { placeholder = @Html.Sitecore().Dictionary("Cart/Checkout/Fields/Zip"), required = "required", data_bind = "value: zipPostalCode" } })</div>
+								<div class="col-xs-100 col-sm-50">@Html.EditorFor(m => m.City, new { htmlAttributes = new { placeholder = @Html.Sitecore().Dictionary("Cart/Checkout/Fields/City"), required = "required", data_bind = "value: city" } })</div>
+								<div class="col-xs-100">@Html.DropDownList("Country", Model.CountryOptions, new { data_bind = "value: country" })</div>
+							</div>
+						</div>
+						<hr />
+						<div class="o-field-line">
+							<label>@Html.Sitecore().DictionaryField("Cart/Checkout/Contact")</label>
+							<div class="row u-gutter-small">
+								<div class="col-xs-100">@Html.EditorFor(m => m.Email, new { htmlAttributes = new { placeholder = @Html.Sitecore().Dictionary("Cart/Checkout/Fields/Email"), @type = "email", required = "required", data_bind = "value: email" } })</div>
+								<div class="col-xs-100">@Html.EditorFor(m => m.PhoneNumber, new { htmlAttributes = new { placeholder = @Html.Sitecore().Dictionary("Cart/Checkout/Fields/Phone"), required = "required", data_bind = "value: phoneNumber" } })</div>
+							</div>
+						</div>
+						<hr />
+						<div class="o-field-line" data-bind="with: !$root.buyerCustomerPartyId || ($root.accountingCustomerPartyId() == $root.buyerCustomerPartyId()) ? $root.getParty(-1) : $root.getParty($root.buyerCustomerPartyId())">
+							<input type="checkbox" class="o-expandable-checkbox__trigger" name="otheraddress" id="otheraddress" data-bind="checked: $root.buyerCustomerPartyId && ($root.accountingCustomerPartyId() != $root.buyerCustomerPartyId())" />
+							<label for="otheraddress">@Html.Sitecore().DictionaryField("Cart/Checkout/Other delivery address")</label>
+
+							<div class="o-field-line o-expandable-checkbox__target">
+								<div class="row u-gutter-small">
+									<div class="col-xs-100">@Html.EditorFor(m => m.DeliveryAddress, new { htmlAttributes = new { placeholder = @Html.Sitecore().Dictionary("Cart/Checkout/Fields/Address"), data_bind = "value: address1" } })</div>
+									<div class="col-xs-100 col-sm-50">@Html.EditorFor(m => m.DeliveryZipCode, new { htmlAttributes = new { placeholder = @Html.Sitecore().Dictionary("Cart/Checkout/Fields/Zip"), data_bind = "value: zipPostalCode" } })</div>
+									<div class="col-xs-100 col-sm-50">@Html.EditorFor(m => m.DeliveryCity, new { htmlAttributes = new { placeholder = @Html.Sitecore().Dictionary("Cart/Checkout/Fields/City"), data_bind = "value: city" } })</div>
+									<div class="col-xs-100">@Html.DropDownList("DeliveryCountry", Model.CountryOptions, new { data_bind = "value: country" })</div>
+								</div>
+							</div>
+						</div>
+						<div class="o-field-line">
+							<div class="row">
+								<div class="col-xs-100 col-md-50 c-cart__continue-shopping">
+									@*<a class="btn btn-ghost icon--triangle-left">Continue shopping</a>*@
+								</div>
+								<div class="col-xs-100 col-md-50 u-align-right c-cart__go-checkout">
+									<input class="btn" type="submit" value="@Html.Sitecore().Dictionary("Cart/Checkout/Update contact info")" data-bind="click: function(){$root.updateAddress('#addressform@(Html.Sitecore().CurrentRendering?.UniqueId.ToString("N"))')}" />
+								</div>
+							</div>
+						</div>
+					</div>
+			    </fieldset>
+			</form>
+			<form method="post" class="js-checkout o-form" id="shippingform@(Html.Sitecore().CurrentRendering?.UniqueId.ToString("N"))">
+				<fieldset class="c-checkout__shipping apply-shipping-binding">
+					<div class="c-checkout__header">
+						<h2>@Html.Sitecore().DictionaryField("Cart/Checkout/Shipping details")</h2>
+						<span class="has-error" data-bind="visible: !addressIsValid()">@Html.Sitecore().DictionaryField("Cart/Checkout/Fill in contactinfo")</span>
+						<span data-bind="visible: addressIsValid()">@Html.Sitecore().DictionaryField("Cart/Checkout/Select shipping")</span>
+					</div>
+					<div class="c-checkout__shipping-content" data-bind="slideVisible: $root.addressIsValid() == true && $root.shippingIsValid() == false">
+						<div class="o-field-line o-field-radios-large">
+							<!-- ko foreach: shippingOptions -->
+							<input required="required" type="radio" name="ShippingOption@(Html.Sitecore().CurrentRendering?.UniqueId.ToString("N"))" data-bind="value: externalId, attr: { id: 'ShippingOption@(Html.Sitecore().CurrentRendering?.UniqueId.ToString("N"))' + externalId }, event: {change: function(){$root.updateShippingMethod(externalId)}}, checked: $root.shipping() ? $root.shipping().shippingMethodID : false" />
+							<label data-bind="attr: { for: 'ShippingOption@(Html.Sitecore().CurrentRendering?.UniqueId.ToString("N"))' + externalId }">
+								<span class="o-field-radios-large__right" data-bind="text: typeof(priceInclTax) != 'undefined' ? priceInclTax.description : ''"></span>
+								<strong data-bind="text: name"></strong>
+								<span data-bind="text: description"></span>
+							</label>
+							<!-- /ko -->
+						</div>
+						<div class="o-field-line">
+							<div class="row">
+								<div class="col-xs-100 col-md-50 c-cart__continue-shopping">
+									<a class="btn btn-ghost icon--triangle-left" data-bind="click: function(){ $root.addressIsValid(false) }">@Html.Sitecore().DictionaryField("Cart/Checkout/Previous step")</a>
+								</div>
+								<div class="col-xs-100 col-md-50 u-align-right c-cart__go-checkout">
+									<input class="btn" type="submit" value="@Html.Sitecore().Dictionary("Cart/Checkout/Update contact info")" data-bind="click: function(){$root.goToPaymentStep('#shippingform@(Html.Sitecore().CurrentRendering?.UniqueId.ToString("N"))')}" />
+								</div>
+							</div>
+						</div>
+					</div>
+				</fieldset>
+			</form>
+			<form method="post" class="js-checkout o-form" id="submit@(Html.Sitecore().CurrentRendering?.UniqueId.ToString("N"))">
+				<fieldset class="c-checkout__payment">
+					<div class="c-checkout__header">
+						<h2>@Html.Sitecore().DictionaryField("Cart/Checkout/Payment details")</h2>
+						<span class="has-error" data-bind="visible: !shippingIsValid()">@Html.Sitecore().DictionaryField("Cart/Checkout/Fill in shippinginfo")</span>
+						<span data-bind="visible: shippingIsValid()">@Html.Sitecore().DictionaryField("Cart/Checkout/Select payment")</span>
+					</div>
+					<div class="c-checkout__payment-content" data-bind="slideVisible: $root.shippingIsValid">
+						<div class="o-field-line o-field-radios-large">
+							@foreach (var option in Model.PaymentOptions)
+							{
+								@Html.RadioButton("PaymentOption", option.ExternalId, new { id = "PaymentOption-" + option.ExternalId, required = "required" })
+								<label for="PaymentOption-@option.ExternalId" class="radiolabel">
+									@if (option.Properties["Price"] != null && ((Price)option.Properties["Price"]).Amount != 0)
+									{
+										<span class="o-field-radios-large__right">@(((Price)option.Properties["Price"]).ToString())</span>
+									}
+									@if (option.Properties["ImageUrl"] != null)
+									{
+										<img src="@option.Properties["ImageUrl"]" />
+									}
+									<strong>@option.Name</strong>
+									<span>@option.Description</span>
+								</label>
+							}
+						</div>
+						<div class="o-field-line">
+							@*<input type="checkbox" name="newsletter" id="newsletter" /><label for="newsletter">@Html.Sitecore().DictionaryField("Cart/Checkout/Fields/Newsletter")</label><br />*@
+							<input type="checkbox" name="agreeterms" id="agreeterms" value="1" required="required" aria-required="true" /><label class="radiolabel" for="agreeterms">@Html.Sitecore().DictionaryField("Cart/Checkout/Fields/Terms")</label>
+						</div>
+						<div class="o-field-line">
+							<div class="row">
+								<div class="col-xs-100 col-md-50 c-cart__continue-shopping">
+									<a class="btn btn-ghost icon--triangle-left" data-bind="click: function(){ $root.shippingIsValid(false) }">@Html.Sitecore().DictionaryField("Cart/Checkout/Previous step")</a>
+								</div>
+								<div class="col-xs-100 col-md-50 u-align-right c-cart__go-checkout">
+									<input class="btn btn-wide" type="submit" value="@Html.Sitecore().Dictionary("Cart/Checkout/Submit")" data-bind="click: function(){return validateAllForms('#addressform@(Html.Sitecore().CurrentRendering?.UniqueId.ToString("N"))', '#submit@(Html.Sitecore().CurrentRendering?.UniqueId.ToString("N"))', '#shippingform@(Html.Sitecore().CurrentRendering?.UniqueId.ToString("N"))');}" />
+								</div>
+							</div>
+							
+						</div>
+					</div>
+				</fieldset>
+			</form>
+		</div>
+		<div class="col-xs-100 col-md-40 col-lg-30">
+			<div class="c-order-overview">
+				<div class="c-order-overview__header">@Html.Sitecore().DictionaryField("Cart/Your order")</div>
+				<div class="c-order-overview__items u-list-unstyled">
+					<ul data-bind="foreach: lines()">
+						<li class="c-order-overview__item">
+							<div class="c-order-overview__img">
+								<img src="" data-bind="attr: { src: $data.product ? $data.product.thumbnailImageUrl : '~/images/no-image.png' }">
+								<img class="o-no-image" src="~/images/no-image.png" />
+							</div>
+							<div class="c-order-overview__body">
+								<div class="c-order-overview__title" data-bind="text: $data.product ? $data.product.productName : ''"></div>
+								@*<div class="c-order-overview__size">Size: <span data-bind="text: $data.product ? $data.product.size : ''"></span></div>*@
+								<div class="c-order-overview__quantity">@Html.Sitecore().DictionaryField("Cart/Quantity"): <span data-bind="text: quantity"></span></div>
+								<div class="c-order-overview__price" data-bind="text: total.description"></div>
+							</div>
+						</li>
+					</ul>
+				</div>
+				<div class="c-order-overview__subtotals u-list-unstyled">
+					<ul>
+						<li class="c-order-overview__subtotal">
+							<span>@Html.Sitecore().DictionaryField("Cart/Sub total")</span>
+							<span data-bind="text: total() && total().subTotal ? total().subTotal.description : ''"></span>
+						</li>
+						<!-- ko foreach: shipmentAdjustments -->
+						<li class="c-order-overview__shipcost">
+							<span data-bind="text: description"></span>
+							<span data-bind="text: priceExclTaxDescription"></span>
+						</li>
+						<!-- /ko -->
+						<!-- ko foreach: paymentAdjustments -->
+						<li class="c-order-overview__shipcost">
+							<span data-bind="text: description"></span>
+							<span data-bind="text: priceExclTaxDescription"></span>
+						</li>
+						<!-- /ko -->
+						<li class="c-order-overview__VAT">
+							<span>@(Sitecore.Context.PageMode.IsExperienceEditorEditing ? Html.Sitecore().DictionaryField("Cart/Tax") : Html.Raw(string.Format(Html.Sitecore().Dictionary("Cart/Tax"), "<!--ko text: taxPercentage() --><!--/ko-->")))</em></span>
+							<span data-bind="text: total() && total().taxTotal ? total().taxTotal.description : ''"></span>
+						</li>
+					</ul>
+				</div>
+				<div class="c-order-overview__total">
+					<span>@Html.Sitecore().DictionaryField("Cart/Total")</span>
+					<span data-bind="text: total() ? total().description : ''"></span>
+				</div>
+			</div>
+
+		</div>
+
+	</div>
+</div>

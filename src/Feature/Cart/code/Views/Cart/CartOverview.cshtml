@@ -1,0 +1,104 @@
+﻿@using Sitecore.Foundation.Dictionary.Extensions
+@using Glass.Mapper.Sc.Web.Mvc
+@model Sitecore.Feature.Cart.Models.CartOverview
+@if (Model == null)
+{
+	@Html.Partial("~/Views/Shared/SelectDataSource.cshtml")
+	return;
+}
+<div class="o-content-width c-cart u-list-unstyled apply-cart-binding apply-stock-binding">
+	@* TODO: move to seperate component *@
+	@*<div class="c-cart__caption" data-bind="visible: lines().length > 0">
+			<svg class="svg-icon svg-icon-truck">
+				<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-truck"></use>
+			</svg>
+			<strong>Free shipping</strong> on orders over &euro; 70,-
+		</div>*@
+	<div class="c-cart__caption" @(!Sitecore.Context.PageMode.IsExperienceEditorEditing ? Html.Raw("data-bind=\"visible: totalProductCount() <= 0\" style=\"display:none\"") : Html.Raw(""))>
+		<svg class="svg-icon svg-icon-truck">
+			<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-truck"></use>
+		</svg>
+		@Html.Glass().Editable(m => m.CartIsEmptyText)
+	</div>
+	<div @(!Sitecore.Context.PageMode.IsExperienceEditorEditing ? Html.Raw("data-bind=\"visible: totalProductCount() > 0\" style=\"display:none\"") : Html.Raw(""))>
+		<div data-bind="foreach: lines()">
+			<div class="c-cart__line" data-bind="attr: { id: externalCartLineId }">
+				<span class="c-cart__image"><img src="" data-bind="attr: { src: $data.product ? $data.product.thumbnailImageUrl : '~/images/no-image.png' }"></span>
+				<span class="c-cart__name" data-bind="text: $data.product ? $data.product.productName : ''"></span>
+				<span class="c-cart__size">
+					<select data-bind="value: quantity,options: window.features.cart.quantitySelect(quantity())">
+					</select>
+				</span>
+				<span class="c-cart__cost" data-bind="text: total.description"></span>
+				<a class="c-cart__remove" href="javascript://" data-bind="click:function(){ $root.removeLine(externalCartLineId);}">
+					<svg class="svg-icon svg-icon-delete">
+						<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-delete"></use>
+					</svg>
+				</a>
+			</div>
+		</div>
+		@if (Sitecore.Context.PageMode.IsExperienceEditorEditing)
+		{
+			<div class="c-cart__delivery-time has-delivery-time-0">
+				@Html.Glass().Editable(m => m.AllArticlesInStockText)
+			</div>
+
+			<div class="c-cart__delivery-time has-delivery-time-1">
+				@Html.Glass().Editable(m => m.NotAllArticlesInStockText)
+			</div>
+		}
+		else
+		{
+			if (!string.IsNullOrEmpty(Model.AllArticlesInStockText))
+			{
+				<div class="c-cart__delivery-time has-delivery-time-0" style="display: none" data-bind="visible: allArticlesInStock()">
+					@Html.Glass().Editable(m => m.AllArticlesInStockText)
+				</div>
+			}
+			if (!string.IsNullOrEmpty(Model.NotAllArticlesInStockText))
+			{
+				<div class="c-cart__delivery-time has-delivery-time-1" style="display: none" data-bind="visible: !allArticlesInStock()">
+					@Html.Glass().Editable(m => m.NotAllArticlesInStockText)
+				</div>
+			}
+		}
+		<div class="row u-no-margin">
+			<div class="col-xs-100 col-md-40 u-push-right c-cart__totals">
+				<div>
+					<span>@Html.Sitecore().DictionaryField("cart/Sub total")</span>
+					<span data-bind="text: total() && total().subTotal ? total().subTotal.description : ''"></span>
+				</div>
+				<!-- ko foreach: shipmentAdjustments -->
+				<div>
+					<span data-bind="text: description"></span>
+					<span data-bind="text: priceExclTaxDescription"></span>
+				</div>
+				<!-- /ko -->
+				<!-- ko foreach: paymentAdjustments -->
+				<div>
+					<span data-bind="text: description"></span>
+					<span data-bind="text: priceExclTaxDescription"></span>
+				</div>
+				<!-- /ko -->
+				<div>
+					<span>@(Sitecore.Context.PageMode.IsExperienceEditorEditing ? Html.Sitecore().DictionaryField("cart/Tax") : Html.Raw(string.Format(Html.Sitecore().Dictionary("cart/Tax"), "<!--ko text: taxPercentage() --><!--/ko-->")))</span>
+					<span data-bind="text: total() && total().taxTotal ? total().taxTotal.description : ''"></span>
+				</div>
+				<div>
+					<span>@Html.Sitecore().DictionaryField("cart/Total")</span>
+					<span data-bind="text: total() ? total().description : ''"></span>
+				</div>
+			</div>
+		</div>
+		<div class="c-cart__cta">
+			<div class="row">
+				<div class="col-xs-100 col-md-50 c-cart__continue-shopping">
+					@Html.Glass().Editable(m => m.ContinueShoppingLink, new { @class = "btn btn-ghost icon--triangle-left" })
+				</div>
+				<div class="col-xs-100 col-md-50 u-align-right c-cart__go-checkout">
+					@Html.Glass().Editable(m => m.CheckoutLink, new { @class = "btn" })
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

@@ -35,11 +35,8 @@ namespace Sitecore.Foundation.Indexing.Infrastructure.Fields
     public void GetAllTemplates(TemplateItem baseTemplate, List<string> list)
     {
       var str = IdHelper.NormalizeGuid(baseTemplate.ID);
-      list.Add(str);
-      if (baseTemplate.ID == TemplateIDs.StandardTemplate)
-      {
-        return;
-      }
+      if (!list.Contains(str))
+        list.Add(str);
       foreach (var item in baseTemplate.BaseTemplates)
       {
         this.GetAllTemplates(item, list);

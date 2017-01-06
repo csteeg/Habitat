@@ -1,0 +1,41 @@
+﻿@using System.Web.Mvc.Html
+@using Glass.Mapper.Sc.Web.Mvc
+@using Sitecore.Commerce.Entities.Inventory
+@using Sitecore.Data
+@using Sitecore.Data.Items
+@using Sitecore.Foundation.Dictionary.Extensions
+@using Sitecore.Mvc
+@model Sitecore.Feature.Cart.Models.ProductVariants
+@if (Model == null)
+{
+    @Html.Partial("~/Views/Shared/SelectDataSource.cshtml")
+    return;
+}
+else if (Model.Product == null || string.IsNullOrEmpty(Model.Product.GetPrice()) || !Model.Product.Variants.Any())
+{
+    return;
+}
+@{
+    var rendering = Sitecore.Mvc.Presentation.RenderingContext.CurrentOrNull?.Rendering;
+    var renderingId = rendering == null ? "unknownrenderingid" : rendering.Id.ToString("N");
+    var firstVariant = Sitecore.Context.Database.GetItem(new ID(Model.Product.Variants.First().Id));
+    var fieldLabel = firstVariant.Fields[new ID(Model.TextField)].Title;
+}
+
+<div class="c-product-variants clearfix">
+    <span class="o-select-customdesign-wrapper">
+        <select id="sizeselect-@renderingId">
+            @foreach (var variant in Model.Product.Variants)
+            {
+                var item = Sitecore.Context.Database.GetItem(new ID(variant.Id));
+                <option value="@variant.SKU">@fieldLabel: @item[new ID(Model.TextField)]</option>
+            }
+        </select>
+	</span>
+    <a href="javascript://" class="btn" onclick="var select = document.getElementById('sizeselect-@renderingId'), option = select.options[select.selectedIndex]; jQuery(window).trigger('addToCart', [option.value, option.getAttribute('data-amount') || 1]);">
+        <svg class="svg-icon svg-icon-cart">
+            <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-cart"></use>
+        </svg>
+        @Html.Sitecore().Dictionary("/Cart/Add to Cart")
+    </a>
+</div>

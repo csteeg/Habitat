@@ -5,7 +5,7 @@
 @using Sitecore.StringExtensions
 @model Sitecore.Feature.Demo.Models.ExperienceData
 
-<div class="off-canvas-sidebar off-canvas-sidebar-right">
+<div class="off-canvas-sidebar off-canvas-sidebar-right" id="experiencepanel">
   <div class="btn-group-vertical hover" role="group">
       <button type="button" class="btn btn-info sidebar-closed" data-toggle="sidebar" title="@Html.Sitecore().Dictionary("/Demo/ExperiencePanel/Open Visit Details Panel", "Open visit details panel")" data-side="right">
       <span class="glyphicon glyphicon-info-sign icon-md "></span>
@@ -28,4 +28,3 @@
     @Html.Partial("_ExperienceDataContent", Model)
   </div>
 </div>
-

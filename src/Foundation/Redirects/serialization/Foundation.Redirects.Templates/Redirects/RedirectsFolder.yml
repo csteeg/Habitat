@@ -1,0 +1,33 @@
+﻿---
+ID: "ef887cdb-ddda-4693-979e-bf0e1b99305f"
+Parent: "17410711-11a8-47da-a1b4-742037c29518"
+Template: "ab86861a-6030-46c5-b394-e8f99e8b87db"
+Path: /sitecore/templates/Foundation/Redirects/RedirectsFolder
+DB: master
+SharedFields:
+- ID: "06d5295c-ed2f-4a54-9bf2-26228d113318"
+  Hint: __Icon
+  Value: Applications/32x32/folder_refresh.png
+- ID: "12c33f3f-86c5-43a5-aeb4-5598cec45116"
+  Hint: __Base template
+  Type: tree list
+  Value: |
+    {1930BBEB-7805-471A-A3BE-4858AC7CF696}
+    {A87A00B1-E6DB-45AB-8B54-636FEC3B5523}
+    {96AE6BDF-2BC9-47A3-8D83-F788F670BE9E}
+    {DD27DB72-44FE-4754-9086-97A7BA82B06E}
+    {41D82537-4720-409B-903E-2BB2F64312F2}
+- ID: "f7d48a55-2158-4f02-9356-756654404f73"
+  Hint: __Standard values
+  Value: "{DFA7BE50-EDF7-42EB-936B-04EF7AAA0C1D}"
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: "20150216T120512:635596851126883551Z"
+    - ID: "5dd74568-4d4b-44c1-b513-0af5f4cda34f"
+      Hint: __Created by
+      Value: default\Anonymous

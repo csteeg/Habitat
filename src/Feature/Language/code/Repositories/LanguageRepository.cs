@@ -1,47 +1,58 @@
-﻿namespace Sitecore.Feature.Language.Repositories
+﻿using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+using Sitecore.Data.Fields;
+using Sitecore.Foundation.Multisite;
+using Sitecore.Foundation.SitecoreExtensions.Extensions;
+using BoC.InversionOfControl;
+
+namespace Sitecore.Feature.Language.Repositories
 {
-  using System.Collections.Generic;
-  using System.Linq;
-  using Sitecore.Data.Fields;
-  using Sitecore.Feature.Language.Models;
-  using Sitecore.Foundation.Multisite;
-  using Sitecore.Foundation.SitecoreExtensions.Extensions;
+	//TODO: needs loads of refactoring, getting rid of statics at least
+	public static class LanguageRepository
+	{
+		private static IEnumerable<Globalization.Language> GetAll()
+		{
+			if (Context.Database == null)
+				return Enumerable.Empty<Globalization.Language>();
+			return Context.Database.GetLanguages();
+		}
 
-  public static class LanguageRepository
-  {
-    private static IEnumerable<Language> GetAll()
-    {
-      var languages = Context.Database.GetLanguages();
-      return languages.Select(LanguageFactory.Create);
-    }
+		public static Globalization.Language GetActive()
+		{
+			return Context.Language;
+		}
 
-    public static Language GetActive()
-    {
-      return LanguageFactory.Create(Context.Language);
-    }
+		public static IEnumerable<Globalization.Language> GetSupportedLanguages()
+		{
+			if (Context.Database == null)
+				return Enumerable.Empty<Globalization.Language>();
 
-    public static IEnumerable<Language> GetSupportedLanguages()
-    {
-      var languages = GetAll();
-      var siteContext = new SiteContext();
-      var siteDefinition = siteContext.GetSiteDefinition(Context.Item);
+			var languages = GetAll();
+			var siteContext = new SiteContext();
+		    var item = Context.Item ?? Context.Database.GetItem(Context.Site.RootPath + "/" + Context.Site.StartItem);
+		    if (item == null)
+		        return languages;
 
-      if (siteDefinition?.Item == null || !siteDefinition.Item.IsDerived(Feature.Language.Templates.LanguageSettings.ID))
-      {
-        return languages;
-      }
+			var siteDefinition = siteContext.GetSiteDefinition(item);
 
-      var supportedLanguagesField = new MultilistField(siteDefinition.Item.Fields[Feature.Language.Templates.LanguageSettings.Fields.SupportedLanguages]);
-      if (supportedLanguagesField.Count == 0)
-      {
-        return Enumerable.Empty<Language>();
-      }
+			if (siteDefinition?.Item == null)
+			{
+				return languages;
+			}
 
-      var supportedLanguages = supportedLanguagesField.GetItems();
+		    if (!siteDefinition.Item.IsDerived(Templates.LanguageSettings.ID))
+		        return siteDefinition.Item.Languages;
 
-      languages = languages.Where(language => supportedLanguages.Any(item => item.Name.Equals(language.Name)));
+			var supportedLanguagesField = new MultilistField(siteDefinition.Item.Fields[Templates.LanguageSettings.Fields.SupportedLanguages]);
+			if (supportedLanguagesField.Count == 0)
+			{
+				return Enumerable.Empty<Globalization.Language>();
+			}
 
-      return languages;
-    }
-  }
+			var supportedLanguages = supportedLanguagesField.GetItems();
+			languages = languages.Where(language => supportedLanguages.Any(sl => sl.Name.Equals(language.Name)));
+			return languages;
+		}
+	}
 }

@@ -1,0 +1,36 @@
+﻿---
+ID: "ad7387c1-99a5-14c8-25f2-925d0e1b2f60"
+Parent: "f23c52bd-66d1-478d-8fda-86e8e462670b"
+Template: "e269fbb5-3750-427a-9149-7aa950b49301"
+Path: /sitecore/templates/Foundation/Redirects/LinkToLinkRedirect/Redirect fields
+DB: master
+SharedFields:
+- ID: "9c6106ea-7a5a-48e2-8cad-f0f693b1e2d4"
+  Hint: __Read Only
+  Type: Checkbox
+  Value: 1
+- ID: "ba3f86a2-4a1c-4d78-b63d-91c2779c1b5e"
+  Hint: __Sortorder
+  Value: 100
+Languages:
+- Language: de
+  Versions:
+  - Version: 1
+- Language: "de-DE"
+  Versions:
+  - Version: 1
+- Language: en
+  Versions:
+  - Version: 1
+- Language: "en-GB"
+  Versions:
+  - Version: 1
+- Language: es
+  Versions:
+  - Version: 1
+- Language: fr
+  Versions:
+  - Version: 1
+- Language: nl
+  Versions:
+  - Version: 1

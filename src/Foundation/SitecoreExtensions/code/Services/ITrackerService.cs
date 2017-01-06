@@ -1,4 +1,5 @@
-﻿using Sitecore.Data;
+﻿using Sitecore.Analytics.Tracking;
+using Sitecore.Data;
 
 namespace Sitecore.Foundation.SitecoreExtensions.Services
 {
@@ -8,5 +9,6 @@ namespace Sitecore.Foundation.SitecoreExtensions.Services
     void TrackOutcome(ID definitionId);
     void TrackPageEvent(ID pageEventItemId);
     bool IsActive { get; }
+      Contact CurrentContact { get; }
   }
 }

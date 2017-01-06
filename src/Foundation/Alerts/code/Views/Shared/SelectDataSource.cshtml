@@ -1,0 +1,10 @@
+﻿@using Sitecore.Mvc.Presentation
+@if (Model == null && Sitecore.Context.PageMode.IsExperienceEditor)
+{
+    <div style="box-sizing: border-box; opacity: 1; transition: opacity 0.15s linear; padding: 15px; margin-bottom: 20px; border: 1px solid rgb(235, 204, 209); border-radius: 4px; color: rgb(169, 68, 66); font-family: Verdana, sans-serif; font-size: 15px; line-height: 22.5px; background-color: rgb(242, 222, 222);">
+        <a class="alert-link" style="box-sizing: border-box; text-decoration: none; font-weight: 700; color: rgb(102, 81, 44); background-color: transparent" href=""
+           onmousedown="Sitecore.PageModes.PageEditor.postRequest('webedit:setdatasource(referenceId=@RenderingContext.Current.Rendering.UniqueId.ToString("B").ToUpper(),renderingId=@RenderingContext.Current.Rendering.RenderingItem.ID,id=@RenderingContext.Current.Rendering.Item.ID)', null, false)">
+            <strong style="box-sizing: border-box;">[SELECT A DATA SOURCE]</strong>
+        </a>
+    </div>
+}

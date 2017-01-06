@@ -12,5 +12,5 @@
 
 @if (Model != null)
 {
-  <div class="alert @alerts[Model.Type]">@Model.Message</div>
+  <div class="alert @alerts[Model.Type]">@Html.Raw(Model.Message)</div>
 }

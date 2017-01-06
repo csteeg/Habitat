@@ -33,17 +33,17 @@
             return this.GetCurrentOutcomes().Concat(this.GetHistoricalOutcomes()).Select(this.Create);
         }
 
-        private Outcome Create(IOutcome outcome)
-        {
-            var definition = GetOutcomeDefinition(outcome.DefinitionId);
-            return new Outcome
-                   {
-                       Title = definition?.Name ?? DictionaryPhraseRepository.Current.Get("/Demo/Outcomes/Unknown Outcome", "(Unknown)"),
-                       Date = outcome.DateTime,
-                       IsCurrentVisit = outcome.InteractionId?.ToGuid() == Tracker.Current?.Interaction.InteractionId,
-                       OutcomeGroup = this.GetOutcomeGroup(definition)
-                   };
-        }
+    private Outcome Create(IOutcome outcome)
+    {
+      var definition = GetOutcomeDefinition(outcome.DefinitionId);
+      return new Outcome
+             {
+               Title = definition?.Name ?? DictionaryPhraseRepository.Current.Get("/Demo/Outcomes/Unknown Outcome", "(Unknown)"),
+               Date = outcome.DateTime,
+               IsCurrentVisit = outcome.InteractionId?.ToGuid() == Tracker.Current?.Interaction?.InteractionId,
+               OutcomeGroup = this.GetOutcomeGroup(definition)
+             };
+    }
 
         private string GetOutcomeGroup(IOutcomeDefinition outcome)
         {

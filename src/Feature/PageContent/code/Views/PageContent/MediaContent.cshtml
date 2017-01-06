@@ -1,0 +1,35 @@
+﻿@using Sitecore.Feature.PageContent.Models
+@using Glass.Mapper.Sc.Web.Mvc
+@using Sitecore.Collections
+
+@inherits GlassView<MediaContent>
+@{
+    var url = "";
+    var hasVideo = Model.Video!=null && !string.IsNullOrEmpty(Model.Video.Url);
+}
+
+@if (Model != null)
+{
+    <div class="c-image-or-video @(Model.ScaleImage || hasVideo ? "sc-image-not-scaled" : "")" @(Model.Image != null ? "style=background-image:url(" + Model.Image.Src + ")" : "")>
+        @if (hasVideo)
+        {
+            <video controls class="video-inline img-responsive" src="@Model.Video.BuildUrl((SafeDictionary<string>)null)" type="video/mp4">
+                Your browser doesn't support HTML5 video.
+                <a href="@Model.Video.BuildUrl((SafeDictionary<string>)null)">Download</a> the video instead.
+            </video>
+        }
+        else if (IsInEditingMode)
+        {
+            using (BeginRenderLink(m => m.Video, isEditable: true))
+            {
+                <div>Video Link</div>
+            }
+        }
+
+        @RenderImage(m => m.Image, isEditable: true)
+    </div>
+}
+else if (IsInEditingMode)
+{
+    <h2>Media Content: No data source has been selected</h2>
+}

@@ -57,7 +57,7 @@
         return defaultValue;
       }
 
-      return dictionaryItem.Fields[Templates.DictionaryEntry.Fields.Phrase].Value ?? defaultValue;
+      return !string.IsNullOrEmpty(dictionaryItem.Fields[Templates.DictionaryRichTextEntry.Fields.Phrase].Value) ? dictionaryItem.Fields[Templates.DictionaryRichTextEntry.Fields.Phrase].Value : dictionaryItem.Fields[Templates.DictionaryEntry.Fields.Phrase].Value ?? defaultValue;
     }
 
     public Item GetItem([NotNull] string relativePath, string defaultValue = "")
