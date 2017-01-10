@@ -42,7 +42,7 @@ namespace Sitecore.Foundation.Forms.ModelMetaData
         [UsedImplicitly]
         public virtual void Process(PipelineArgs args)
         {
-            if (this.perRequestStorage == null || this.corePipeline == null)
+            if (this.perRequestStorage == null || this.corePipeline == null || global::Sitecore.Configuration.Factory.GetConfigNode(Sitecore.Forms.Mvc.Constants.FormRenderingContext, false) == null)
                 return;
             //IoC.Resolver.RegisterInstance<System.Web.Mvc.ModelMetadataProvider>( we cannot use ioc any more at this time
             ModelMetadataProviders.Current = new PipelineBasedDataAnnotationsModelMetadataProvider(this.perRequestStorage, this.corePipeline);

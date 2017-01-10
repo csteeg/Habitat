@@ -40,8 +40,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="BoC, Version=4.0.4.0, Culture=neutral, PublicKeyToken=b66b1a10e1d96b4d, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\BoC.4.0.4.0\lib\net40\BoC.dll</HintPath>
+    <Reference Include="BoC, Version=4.0.5.0, Culture=neutral, PublicKeyToken=b66b1a10e1d96b4d, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\BoC.4.0.5.0\lib\net40\BoC.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="BoC.Persistence.SitecoreGlass.Core, Version=4.3.2.0, Culture=neutral, processorArchitecture=MSIL">
@@ -123,7 +123,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="WebActivatorEx, Version=2.0.0.0, Culture=neutral, PublicKeyToken=7b26dc2a43f6a0d4, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\WebActivatorEx.2.0.5\lib\net40\WebActivatorEx.dll</HintPath>
+      <HintPath>..\..\..\..\packages\WebActivatorEx.2.2.0\lib\net40\WebActivatorEx.dll</HintPath>
       <Private>True</Private>
     </Reference>
   </ItemGroup>
@@ -131,6 +131,7 @@
     <Content Include="App_Config\Include\Foundation\Foundation.Publishing.config">
       <SubType>Designer</SubType>
     </Content>
+    <Content Include="License.txt" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\SetDependencies.cs" />

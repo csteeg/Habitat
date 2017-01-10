@@ -19,13 +19,14 @@ namespace Sitecore.Foundation.BoC.IoC
 
         public override object GetService(Type serviceType)
         {
-            //sitecore "injects" it's own dependencies in it's controllers (and others), so don't resolve sitecore classes, just construct them
-            if (!serviceType.Assembly.FullName.StartsWith("sitecore.feature.", StringComparison.InvariantCultureIgnoreCase)
-                && !serviceType.Assembly.FullName.StartsWith("sitecore.foundation.", StringComparison.InvariantCultureIgnoreCase)
-                && serviceType.Assembly.FullName.StartsWith("sitecore.", StringComparison.InvariantCultureIgnoreCase))
-            {
-                return Activator.CreateInstance(serviceType);
-            }
+            ////sitecore "injects" it's own dependencies in it's controllers (and others), so don't resolve sitecore classes, just construct them
+            //if (!serviceType.Assembly.FullName.StartsWith("sitecore.feature.", StringComparison.InvariantCultureIgnoreCase)
+            //    && !serviceType.Assembly.FullName.StartsWith("sitecore.foundation.", StringComparison.InvariantCultureIgnoreCase)
+            //    && serviceType.Assembly.FullName.StartsWith("sitecore.", StringComparison.InvariantCultureIgnoreCase)
+            //    && !this._resolver.IsRegistered(serviceType))
+            //{
+            //    return Activator.CreateInstance(serviceType);
+            //}
             return base.GetService(serviceType);
         }
 

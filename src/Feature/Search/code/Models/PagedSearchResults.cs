@@ -2,7 +2,7 @@
 {
   using Sitecore.Foundation.Indexing.Models;
 
-  public class PagedSearchResults : IPageable
+  public class PagedSearchResults// : IPageable
   {
     public const int DefaultResultsOnPage = 10;
     public const int DefaultPagesToShow = 5;

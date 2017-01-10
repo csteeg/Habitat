@@ -20,7 +20,7 @@ namespace Sitecore.Foundation.GlassMapper.App_Start
 		{
 			Glass.Mapper.Configuration.Defaults.OverallConfiguration.InferType = true;
 			Glass.Mapper.Configuration.Defaults.OverallConfiguration.IsLazy = true;
-			global::BoC.Persistence.SitecoreGlass.Initialize.InitBoc.Start();
+			//global::BoC.Persistence.SitecoreGlass.Initialize.InitBoc.Start();
 
 
 			var config = new global::Glass.Mapper.Sc.Config();
@@ -57,8 +57,10 @@ namespace Sitecore.Foundation.GlassMapper.App_Start
 		}
 		public static void PostLoad()
 		{
-			//Set config property to true in Glass.Mapper.Sc.CodeFirst.config to enable codefirst
-			if (!global::Sitecore.Configuration.Settings.GetBoolSetting("Glass.CodeFirst", false)) return;
+            global::BoC.Profiling.Profiler.Enabled = global::Sitecore.Configuration.Settings.GetBoolSetting("BoC.Profiler.Enabled", false);
+
+            //Set config property to true in Glass.Mapper.Sc.CodeFirst.config to enable codefirst
+            if (!global::Sitecore.Configuration.Settings.GetBoolSetting("Glass.CodeFirst", false)) return;
 
 			var dbs = global::Sitecore.Configuration.Factory.GetDatabases();
 			foreach (var db in dbs)

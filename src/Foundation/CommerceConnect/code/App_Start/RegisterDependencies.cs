@@ -29,19 +29,13 @@
 			this._resolver.RegisterType<IShippingService, ShippingService>();
 			this._resolver.RegisterType<IPaymentService, PaymentService>();
 			this._resolver.RegisterType<IOrderService, OrderService>();
-			this._resolver.RegisterInstance(Factory.CreateObject("entityFactory", true) as IEntityFactory);
-			if (Factory.GetConfigNode("eaStateCartRepository") != null)
-				this._resolver.RegisterInstance((EaStateCartRepository)Factory.CreateObject("eaStateCartRepository", true));
-			if (Factory.GetConfigNode("cartServiceProvider") != null)
-				this._resolver.RegisterInstance((CartServiceProvider)Factory.CreateObject("cartServiceProvider", true));
-			if (Factory.GetConfigNode("orderServiceProvider") != null)
-				this._resolver.RegisterInstance((OrderServiceProvider)Factory.CreateObject("orderServiceProvider", true));
-			if (Factory.GetConfigNode("shippingServiceProvider") != null)
-				this._resolver.RegisterInstance((ShippingServiceProvider)Factory.CreateObject("shippingServiceProvider", true));
-			if (Factory.GetConfigNode("paymentServiceProvider") != null)
-				this._resolver.RegisterInstance((PaymentServiceProvider)Factory.CreateObject("paymentServiceProvider", true));
-			if (Factory.GetConfigNode("inventoryServiceProvider") != null)
-				this._resolver.RegisterInstance((InventoryServiceProvider)Factory.CreateObject("inventoryServiceProvider", true));
+			this._resolver.RegisterFactory<IEntityFactory>(() => Factory.CreateObject("entityFactory", true) as IEntityFactory);
+			this._resolver.RegisterFactory(() => (EaStateCartRepository)Factory.CreateObject("eaStateCartRepository", true));
+			this._resolver.RegisterFactory(() => (CartServiceProvider)Factory.CreateObject("cartServiceProvider", true));
+			this._resolver.RegisterFactory(() => (OrderServiceProvider)Factory.CreateObject("orderServiceProvider", true));
+			this._resolver.RegisterFactory(() => (ShippingServiceProvider)Factory.CreateObject("shippingServiceProvider", true));
+			this._resolver.RegisterFactory(() => (PaymentServiceProvider)Factory.CreateObject("paymentServiceProvider", true));
+			this._resolver.RegisterFactory(() => (InventoryServiceProvider)Factory.CreateObject("inventoryServiceProvider", true));
         }
 	}
 }
