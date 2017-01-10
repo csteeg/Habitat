@@ -61,13 +61,13 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Glass.Mapper.Sc">
-      <HintPath>..\..\..\..\packages\BoC.Glass.Mapper.Sc.Core.4.2.5.4\lib\81\Glass.Mapper.Sc.dll</HintPath>
+      <HintPath>..\..\..\..\packages\BoC.Glass.Mapper.Sc.Core.4.2.5.4\lib\100\glass.Mapper.Sc.dll</HintPath>
     </Reference>
     <Reference Include="Glass.Mapper.Sc.ContentSearch">
-      <HintPath>..\..\..\..\packages\BoC.Glass.Mapper.Sc.ContentSearch.LuceneProvider.4.2.5.4\lib\81\Glass.Mapper.Sc.ContentSearch.dll</HintPath>
+      <HintPath>..\..\..\..\packages\BoC.Glass.Mapper.Sc.ContentSearch.LuceneProvider.4.2.5.4\lib\100\glass.Mapper.Sc.ContentSearch.dll</HintPath>
     </Reference>
     <Reference Include="Glass.Mapper.Sc.ContentSearch.LuceneProvider">
-      <HintPath>..\..\..\..\packages\BoC.Glass.Mapper.Sc.ContentSearch.LuceneProvider.4.2.5.4\lib\81\Glass.Mapper.Sc.ContentSearch.LuceneProvider.dll</HintPath>
+      <HintPath>..\..\..\..\packages\BoC.Glass.Mapper.Sc.ContentSearch.LuceneProvider.4.2.5.4\lib\100\glass.Mapper.Sc.ContentSearch.LuceneProvider.dll</HintPath>
     </Reference>
     <Reference Include="Glass.Mapper.Sc.Mvc">
       <HintPath>..\..\..\..\packages\BoC.Glass.Mapper.Sc.Core.4.2.5.4\lib\Mvc52\Glass.Mapper.Sc.Mvc.dll</HintPath>
