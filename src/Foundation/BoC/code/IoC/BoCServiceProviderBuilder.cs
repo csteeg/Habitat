@@ -27,7 +27,6 @@ namespace Sitecore.Foundation.BoC.IoC
             if (simpleInjector != null)
             {
                 simpleInjector.AllowLifestyleMismatchVerification(); //sitecore references transient objects from singletons!
-                simpleInjector.Container.RegisterWebApiControllers(GlobalConfiguration.Configuration);
             }
             resolver.Populate(serviceCollection);
             Initializer.Execute(resolver, appdomainHelper);
