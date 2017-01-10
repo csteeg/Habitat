@@ -48,8 +48,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="BoC, Version=4.0.4.0, Culture=neutral, PublicKeyToken=b66b1a10e1d96b4d, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\BoC.4.0.4.0\lib\net40\BoC.dll</HintPath>
+    <Reference Include="BoC, Version=4.0.5.0, Culture=neutral, PublicKeyToken=b66b1a10e1d96b4d, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\BoC.4.0.5.0\lib\net40\BoC.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=1.0.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
