@@ -56,7 +56,7 @@ namespace Sitecore.Common.Website
 
 
             var installed = files.Where(f => completedfiles.Any(c => new FileInfo(f).Name == new FileInfo(c).Name)).ToArray();
-            var needinstall = files.Where(f => !installed.Contains(f)).ToArray();
+            var needinstall = files.Where(f => !installed.Contains(f) && !f.Contains("deploy-")).ToArray();
             if (!needinstall.Any())
             {
                 var unicorned = Path.Combine(completedfolder, ".sitecoreprojectstarter.unicorned");
