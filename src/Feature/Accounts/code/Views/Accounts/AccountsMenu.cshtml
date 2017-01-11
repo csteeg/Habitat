@@ -1,19 +1,21 @@
-﻿@using Sitecore.Feature.Accounts
+﻿@using BoC.InversionOfControl
+@using Sitecore.Feature.Accounts
 @using Sitecore.Feature.Accounts.Models
 @using Sitecore.Feature.Accounts.Services
 @using Sitecore.Foundation.Dictionary.Extensions
 @model Sitecore.Mvc.Presentation.RenderingModel
 
 @{
-  if (Model.Item == null)
-  {
-    return;
-  }
-  var accountSettings = AccountsSettingsService.Instance.GetAccountsSettingsItem(Model.Item);
-  if (accountSettings == null)
-  {
-    return;
-  }
+    var accountsSettingsService = IoC.Resolver.Resolve<IAccountsSettingsService>();
+    if (Model.Item == null || accountsSettingsService == null)
+    {
+        return;
+    }
+    var accountSettings = accountsSettingsService.GetAccountsSettingsItem(Model.Item);
+    if (accountSettings == null)
+    {
+        return;
+    }
 }
   <li class="dropdown hidden-xs">
     <a href="#" class="btn dropdown-toggle" data-toggle="dropdown">
@@ -42,7 +44,7 @@
             <label class="control-label">@Html.Sitecore().DictionaryField("/Accounts/Accounts Menu/Email", "E-mail")</label>
             <div class="form-control-static">@Sitecore.Context.User.Profile.Email</div>
           </div>
-          <a class="btn btn-block btn-primary" href="@AccountsSettingsService.Instance.GetPageLinkOrDefault(Model.Item, Templates.AccountsSettings.Fields.AccountsDetailsPage)">@Html.Sitecore().DictionaryField("/Accounts/Accounts Menu/Edit Details", "Edit details")</a>
+          <a class="btn btn-block btn-primary" href="@accountsSettingsService.GetPageLinkOrDefault(Model.Item, Templates.AccountsSettings.Fields.AccountsDetailsPage)">@Html.Sitecore().DictionaryField("/Accounts/Accounts Menu/Edit Details", "Edit details")</a>
           <button type="submit" class="btn btn-block btn-default">@Html.Sitecore().Dictionary("/Accounts/Accounts Menu/Logout", "Logout")</button>
         }
       }

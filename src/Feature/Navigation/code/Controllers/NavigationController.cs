@@ -11,10 +11,6 @@
   {
     private readonly INavigationRepository _navigationRepository;
 
-    public NavigationController() : this(new NavigationRepository(RenderingContext.Current.ContextItem))
-    {
-    }
-
     public NavigationController(INavigationRepository navigationRepository)
     {
       this._navigationRepository = navigationRepository;

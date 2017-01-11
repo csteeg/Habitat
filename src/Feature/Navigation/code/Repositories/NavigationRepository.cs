@@ -6,15 +6,23 @@
     using Sitecore.Data.Items;
     using Sitecore.Feature.Navigation.Models;
     using Sitecore.Foundation.SitecoreExtensions.Extensions;
+    using Sitecore.Foundation.SitecoreExtensions.Providers;
 
     public class NavigationRepository : INavigationRepository
     {
-        public Item ContextItem { get; }
+        private ISitecoreContextProvider _sitecoreContextProvider;
+        public Item ContextItem
+        {
+            get
+            {
+                return this._sitecoreContextProvider.GetCurrentRenderingContext()?.ContextItem;
+            }
+        }
         public Item NavigationRoot { get; }
 
-        public NavigationRepository(Item contextItem)
+        public NavigationRepository(ISitecoreContextProvider sitecoreContextProvider)
         {
-            this.ContextItem = contextItem;
+            this._sitecoreContextProvider = sitecoreContextProvider;
             this.NavigationRoot = this.GetNavigationRoot(this.ContextItem);
             if (this.NavigationRoot == null)
             {
