@@ -55,8 +55,8 @@
       <HintPath>..\..\..\..\packages\BoC.Logging.Sitecore.4.0.0.0\lib\net45\BoC.Logging.Sitecore.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="BoC.Sitecore.Mvc, Version=4.1.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\BoC.Sitecore.Mvc.4.1.1.0\lib\net45\BoC.Sitecore.Mvc.dll</HintPath>
+    <Reference Include="BoC.Sitecore.Mvc, Version=4.1.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\BoC.Sitecore.Mvc.4.1.2.0\lib\net45\BoC.Sitecore.Mvc.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="BoC.Web.Mvc, Version=4.1.0.2, Culture=neutral, PublicKeyToken=b66b1a10e1d96b4d, processorArchitecture=MSIL">
@@ -175,9 +175,9 @@
     <None Include="web.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="web.config.transform">
+    <None Include="web.config.transform">
       <SubType>Designer</SubType>
-    </Content>
+    </None>
     <None Include="web.Debug.config">
       <DependentUpon>web.config</DependentUpon>
     </None>
